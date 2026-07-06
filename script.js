@@ -32,9 +32,10 @@ const achievementsDiv = document.getElementById("achievements");
 
 let btnX = window.innerWidth / 2 - 60;
 let btnY = 300;
-let speedX = 3;
-let speedY = 3;
+let starSpeedX = 3;
+let starSpeedY = 3;
 let difficulty = 1;
+let obstacleSpeed = 8;
 let obstacles = [];
 let invincible = false;
 let audioCtx = null;
