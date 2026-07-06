@@ -200,8 +200,8 @@ function createObstacle() {
             el: el,
             x: Math.random() * (window.innerWidth - 60),
             y: Math.random() * (window.innerHeight - 200) + 100,
-            vx: (Math.random() - 0.5) * 5 * difficulty,
-            vy: (Math.random() - 0.5) * 5 * difficulty,
+            vx: (Math.random() - 0.5) * obstacleSpeed * difficulty,
+            vy: (Math.random() - 0.5) * obstacleSpeed * difficulty,
             size: 50
         };
         
@@ -258,23 +258,19 @@ mainBtn.style.top = btnY + "px";
 
 function updateDifficulty() {
     difficulty = 1 + Math.floor(points / 50) * 0.3;
-    const baseSpeed = 3;
-    speedX = baseSpeed * difficulty * (Math.random() > 0.5 ? 1 : -1);
-    speedY = baseSpeed * difficulty * (Math.random() > 0.5 ? 1 : -1);
+    obstacleSpeed = 8 + Math.floor(points / 100) * 2;
     createObstacle();
 }
 
 function moveButton() {
-    btnX += speedX;
-    btnY += speedY;
+    btnX += starSpeedX;
+    btnY += starSpeedY;
     
     if (btnX <= 0 || btnX >= window.innerWidth - 120) {
-        speedX *= -1;
-        speedX += (Math.random() - 0.5) * difficulty;
+        starSpeedX *= -1;
     }
     if (btnY <= 80 || btnY >= window.innerHeight - 120) {
-        speedY *= -1;
-        speedY += (Math.random() - 0.5) * difficulty;
+        starSpeedY *= -1;
     }
     
     btnX = Math.max(0, Math.min(btnX, window.innerWidth - 120));
