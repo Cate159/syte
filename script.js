@@ -103,6 +103,7 @@ function createObstacle() {
             points = Math.max(0, points - penalty);
             updateDisplay();
             showAchievement(`💀 -${penalty} punti!`);
+            playExplosionSound();
             
             invincible = true;
             mainBtn.style.opacity = "0.5";
