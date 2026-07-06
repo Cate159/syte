@@ -61,39 +61,128 @@ function playCoinSound() {
 function playExplosionSound(emoji) {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     
-    const oscillator = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    const filter = audioCtx.createBiquadFilter();
-    
-    oscillator.connect(filter);
-    filter.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    
     const sounds = {
-        "💀": { type: "sawtooth", freq: 80, duration: 0.4 },
-        "💣": { type: "square", freq: 100, duration: 0.5 },
-        "🔥": { type: "sawtooth", freq: 200, duration: 0.3 },
-        "⚡": { type: "square", freq: 400, duration: 0.15 },
-        "👻": { type: "sine", freq: 300, duration: 0.5 },
-        "🦇": { type: "triangle", freq: 250, duration: 0.3 },
-        "🕷️": { type: "sawtooth", freq: 150, duration: 0.35 },
-        "🦈": { type: "square", freq: 120, duration: 0.45 }
+        "💀": () => {
+            const osc1 = audioCtx.createOscillator();
+            const osc2 = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc1.type = "sawtooth";
+            osc2.type = "square";
+            osc1.frequency.setValueAtTime(50, audioCtx.currentTime);
+            osc2.frequency.setValueAtTime(55, audioCtx.currentTime);
+            osc1.connect(gain);
+            osc2.connect(gain);
+            gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+            osc1.start();
+            osc2.start();
+            osc1.stop(audioCtx.currentTime + 0.6);
+            osc2.stop(audioCtx.currentTime + 0.6);
+        },
+        "💣": () => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "square";
+            osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(20, audioCtx.currentTime + 0.5);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        },
+        "🔥": () => {
+            const bufferSize = audioCtx.sampleRate * 0.4;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+            }
+            const source = audioCtx.createBufferSource();
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = "bandpass";
+            filter.frequency.value = 500;
+            source.buffer = buffer;
+            source.connect(filter);
+            filter.connect(audioCtx.destination);
+            source.start();
+        },
+        "⚡": () => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "sawtooth";
+            osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.15);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.15);
+        },
+        "👻": () => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(200, audioCtx.currentTime + 0.5);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        },
+        "🦇": () => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "triangle";
+            osc.frequency.setValueAtTime(2000, audioCtx.currentTime);
+            for (let i = 0; i < 10; i++) {
+                osc.frequency.setValueAtTime(2000 - i * 150, audioCtx.currentTime + i * 0.03);
+            }
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        },
+        "🕷️": () => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "sawtooth";
+            osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+            for (let i = 0; i < 20; i++) {
+                osc.frequency.setValueAtTime(100 + Math.random() * 200, audioCtx.currentTime + i * 0.02);
+            }
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+        },
+        "🦈": () => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "square";
+            osc.frequency.setValueAtTime(40, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.3);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        }
     };
     
-    const sound = sounds[emoji] || { type: "sawtooth", freq: 150, duration: 0.3 };
-    
-    oscillator.type = sound.type;
-    oscillator.frequency.setValueAtTime(sound.freq, audioCtx.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + sound.duration);
-    
-    filter.type = "lowpass";
-    filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
-    
-    gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + sound.duration);
-    
-    oscillator.start(audioCtx.currentTime);
-    oscillator.stop(audioCtx.currentTime + sound.duration);
+    if (sounds[emoji]) {
+        sounds[emoji]();
+    }
 }
 
 const obstacleEmojis = ["💀", "💣", "🔥", "⚡", "👻", "🦇", "🕷️", "🦈"];
