@@ -8,6 +8,6 @@
     "dev": "node server.js & node sync.js"
   },
   "dependencies": {
-    "pg": "^8.11.0"
+    "pg": "^8.22.0"
   }
 }
