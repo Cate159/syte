@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Clicker Game</h1>
+        
+        <div class="stats">
+            <div class="stat">
+                <span class="label">Punti</span>
+                <span class="value" id="points">0</span>
+            </div>
+            <div class="stat">
+                <span class="label">Per Click</span>
+                <span class="value" id="perClick">1</span>
+            </div>
+            <div class="stat">
+                <span class="label">Per Secondo</span>
+                <span class="value" id="perSecond">0</span>
+            </div>
+        </div>
+
+        <div class="click-area" id="clickArea">
+            <button class="main-btn" id="mainBtn">
+                <span class="emoji">⭐</span>
+                <span class="click-text">CLICCA!</span>
+            </button>
+        </div>
+
+        <div class="achievements" id="achievements"></div>
+
+        <div class="upgrades">
+            <h2>🛒 Negozio</h2>
+            <div class="upgrade-grid" id="upgradeGrid"></div>
+        </div>
+
+        <div class="leaderboard">
+            <h2>🏆 Obiettivi</h2>
+            <div id="milestones"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
