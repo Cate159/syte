@@ -187,26 +187,26 @@ const server = http.createServer((req, res) => {
     else if (url === '/api/visits' && method === 'POST') {
         pool.query('UPDATE visits SET count = count + 1 WHERE id = 1 RETURNING count')
             .then(result => {
-                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.writeHead(200, corsHeaders);
                 res.end(JSON.stringify({ visits: result.rows[0].count }));
             })
             .catch(e => {
-                res.writeHead(500);
+                res.writeHead(500, corsHeaders);
                 res.end(JSON.stringify({ error: 'Database error' }));
             });
     }
     else if (url === '/api/data' && method === 'GET') {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.writeHead(200, corsHeaders);
         res.end(JSON.stringify(data));
     }
     else if (url === '/api/counter/increment' && method === 'POST') {
         data.counter++;
-        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.writeHead(200, corsHeaders);
         res.end(JSON.stringify({ counter: data.counter }));
     }
     else if (url === '/api/counter/decrement' && method === 'POST') {
         data.counter--;
-        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.writeHead(200, corsHeaders);
         res.end(JSON.stringify({ counter: data.counter }));
     }
     else if (url === '/api/todos' && method === 'POST') {
@@ -215,24 +215,24 @@ const server = http.createServer((req, res) => {
         req.on('end', () => {
             const todo = { id: Date.now(), text: JSON.parse(body).text };
             data.todos.push(todo);
-            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.writeHead(200, corsHeaders);
             res.end(JSON.stringify(todo));
         });
     }
     else if (url.startsWith('/api/todos/') && method === 'DELETE') {
         const id = parseInt(url.split('/')[3]);
         data.todos = data.todos.filter(t => t.id !== id);
-        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.writeHead(200, corsHeaders);
         res.end(JSON.stringify({ success: true }));
     }
     else if (url === '/api/leaderboard' && method === 'GET') {
         pool.query('SELECT name, score, date FROM leaderboard ORDER BY score DESC LIMIT 100')
             .then(result => {
-                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.writeHead(200, corsHeaders);
                 res.end(JSON.stringify(result.rows));
             })
             .catch(e => {
-                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.writeHead(200, corsHeaders);
                 res.end(JSON.stringify(getLeaderboardLocal()));
             });
     }
@@ -243,7 +243,7 @@ const server = http.createServer((req, res) => {
             try {
                 const { name, score } = JSON.parse(body);
                 if (!name || !score) {
-                    res.writeHead(400);
+                    res.writeHead(400, corsHeaders);
                     res.end(JSON.stringify({ error: 'Name and score required' }));
                     return;
                 }
@@ -260,7 +260,7 @@ const server = http.createServer((req, res) => {
                     })
                     .then(() => pool.query('SELECT row_number() OVER (ORDER BY score DESC) as rank FROM leaderboard WHERE name = $1', [name]))
                     .then(result => {
-                        res.writeHead(200, { 'Content-Type': 'application/json' });
+                        res.writeHead(200, corsHeaders);
                         res.end(JSON.stringify({ success: true, rank: result.rows[0]?.rank || 1 }));
                     })
                     .catch(e => {
@@ -280,11 +280,11 @@ const server = http.createServer((req, res) => {
                         leaderboard = leaderboard.slice(0, 100);
                         saveLeaderboardLocal(leaderboard);
                         
-                        res.writeHead(200, { 'Content-Type': 'application/json' });
+                        res.writeHead(200, corsHeaders);
                         res.end(JSON.stringify({ success: true, rank: leaderboard.findIndex(e => e.name === name) + 1 }));
                     });
             } catch (e) {
-                res.writeHead(400);
+                res.writeHead(400, corsHeaders);
                 res.end(JSON.stringify({ error: 'Invalid data' }));
             }
         });
