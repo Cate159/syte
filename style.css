@@ -66,6 +66,23 @@ h2 {
     color: #ffd700;
 }
 
+.reset-btn {
+    background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1rem;
+}
+
+.reset-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 100, 100, 0.4);
+}
+
 .click-area {
     text-align: center;
     margin: 30px 0;
