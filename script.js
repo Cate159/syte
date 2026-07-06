@@ -292,6 +292,7 @@ function showAchievement(text) {
 setInterval(() => {
     if (pointsPerSecond > 0) {
         points += pointsPerSecond / 10;
+        playCoinSound();
         updateDisplay();
         checkMilestones();
     }
