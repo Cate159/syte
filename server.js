@@ -56,3 +56,26 @@ const server = http.createServer((req, res) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log('Server running on port ' + PORT));
+
+if (process.env.NODE_ENV !== 'production') {
+    const { spawn } = require('child_process');
+    const files = ['index.html', 'style.css', 'script.js', 'server.js', 'package.json'];
+    let timeout = null;
+    
+    const sync = () => {
+        console.log('\nSyncing with GitHub...');
+        spawn('git', ['add', '.'], { shell: true, stdio: 'inherit' })
+            .on('close', () => {
+                spawn('git', ['commit', '-m', 'Auto update'], { shell: true, stdio: 'inherit' })
+                    .on('close', (code) => {
+                        if (code === 0) spawn('git', ['push'], { shell: true, stdio: 'inherit' });
+                    });
+            });
+    };
+    
+    files.forEach(f => fs.watch(f, () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(sync, 2000);
+    }));
+    console.log('Auto-sync enabled');
+}
