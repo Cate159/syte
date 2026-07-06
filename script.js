@@ -344,3 +344,72 @@ updateDisplay();
 renderUpgrades();
 renderMilestones();
 createObstacle();
+loadLeaderboard();
+
+async function loadLeaderboard() {
+    try {
+        const res = await fetch('/api/leaderboard');
+        const data = await res.json();
+        renderLeaderboard(data);
+    } catch (e) {
+        console.log('Leaderboard non disponibile');
+    }
+}
+
+function renderLeaderboard(entries) {
+    const list = document.getElementById('leaderboardList');
+    list.innerHTML = '';
+    
+    if (entries.length === 0) {
+        list.innerHTML = '<p style="text-align: center; color: #aaa;">Nessun punteggio ancora. Sarai il primo!</p>';
+        return;
+    }
+    
+    entries.slice(0, 10).forEach((entry, i) => {
+        const div = document.createElement('div');
+        const topClass = i < 3 ? ` top-${i + 1}` : '';
+        div.className = `leaderboard-entry${topClass}`;
+        
+        const medals = ['🥇', '🥈', '🥉'];
+        const rank = i < 3 ? medals[i] : `#${i + 1}`;
+        
+        div.innerHTML = `
+            <span class="leaderboard-rank">${rank}</span>
+            <span class="leaderboard-name">${entry.name}</span>
+            <span class="leaderboard-score">⭐ ${formatNumber(entry.score)}</span>
+        `;
+        list.appendChild(div);
+    });
+}
+
+async function saveScore() {
+    const nameInput = document.getElementById('playerName');
+    const name = nameInput.value.trim();
+    
+    if (!name) {
+        showAchievement('⚠️ Inserisci un nome!');
+        return;
+    }
+    
+    if (points < 10) {
+        showAchievement('⚠️ Punteggio troppo basso!');
+        return;
+    }
+    
+    try {
+        const res = await fetch('/api/leaderboard', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, score: Math.floor(points) })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+            showAchievement(`🎉 Punteggio salvato! Posizione #${data.rank}`);
+            loadLeaderboard();
+        }
+    } catch (e) {
+        showAchievement('❌ Errore nel salvataggio');
+    }
+}
