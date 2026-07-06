@@ -20,9 +20,21 @@ body {
 h1 {
     text-align: center;
     font-size: 2.5rem;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-shadow: 0 0 20px rgba(255, 200, 100, 0.5);
     animation: glow 2s ease-in-out infinite alternate;
+}
+
+.visit-counter {
+    text-align: center;
+    font-size: 1rem;
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+.visit-counter span {
+    color: #ffd700;
+    font-weight: bold;
 }
 
 @keyframes glow {
