@@ -98,7 +98,8 @@ function createFloatText(x, y, text) {
     el.textContent = text;
     el.style.left = x + "px";
     el.style.top = y + "px";
-    clickArea.appendChild(el);
+    el.style.position = "fixed";
+    document.body.appendChild(el);
     setTimeout(() => el.remove(), 1000);
 }
 
