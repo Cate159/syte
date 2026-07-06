@@ -413,3 +413,34 @@ async function saveScore() {
         showAchievement('❌ Errore nel salvataggio');
     }
 }
+
+function resetGame() {
+    if (points > 0 && !confirm('Sei sicuro di voler ricominciare? Perderai tutti i punti!')) {
+        return;
+    }
+    
+    points = 0;
+    pointsPerClick = 1;
+    pointsPerSecond = 0;
+    difficulty = 1;
+    completedMilestones = new Set();
+    
+    upgrades.forEach(u => u.owned = 0);
+    
+    obstacles.forEach(obs => obs.el.remove());
+    obstacles = [];
+    
+    speedX = 2;
+    speedY = 2;
+    btnX = window.innerWidth / 2 - 60;
+    btnY = 300;
+    
+    localStorage.removeItem('clickerGame');
+    
+    updateDisplay();
+    renderUpgrades();
+    renderMilestones();
+    createObstacle();
+    
+    showAchievement('🔄 Partita ricominciata!');
+}
