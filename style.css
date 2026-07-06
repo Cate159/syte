@@ -135,7 +135,7 @@ h2 {
     position: fixed;
     font-size: 2.5rem;
     z-index: 999;
-    cursor: not-allowed;
+    cursor: pointer;
     filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
     animation: pulse 0.5s ease-in-out infinite alternate;
     user-select: none;
