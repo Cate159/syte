@@ -120,6 +120,7 @@ function updateDifficulty() {
     const baseSpeed = 2;
     speedX = baseSpeed * difficulty * (Math.random() > 0.5 ? 1 : -1);
     speedY = baseSpeed * difficulty * (Math.random() > 0.5 ? 1 : -1);
+    createObstacle();
 }
 
 function moveButton() {
