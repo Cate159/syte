@@ -23,7 +23,6 @@ const milestones = [
 let completedMilestones = new Set();
 
 const mainBtn = document.getElementById("mainBtn");
-const clickArea = document.getElementById("clickArea");
 const pointsDisplay = document.getElementById("points");
 const perClickDisplay = document.getElementById("perClick");
 const perSecondDisplay = document.getElementById("perSecond");
@@ -89,6 +88,7 @@ function updateDisplay() {
     pointsDisplay.textContent = formatNumber(Math.floor(points));
     perClickDisplay.textContent = formatNumber(pointsPerClick);
     perSecondDisplay.textContent = formatNumber(pointsPerSecond);
+    document.getElementById("difficulty").textContent = difficulty.toFixed(1);
     document.title = `⭐ ${formatNumber(Math.floor(points))} punti - Clicker Game`;
 }
 
