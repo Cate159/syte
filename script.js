@@ -120,8 +120,8 @@ function createObstacle() {
             const penalty = Math.floor(10 * difficulty);
             points = Math.max(0, points - penalty);
             updateDisplay();
-            showAchievement(`💀 -${penalty} punti!`);
-            playExplosionSound();
+            showAchievement(`${el.textContent} -${penalty} punti!`);
+            playExplosionSound(el.textContent);
             
             invincible = true;
             mainBtn.style.opacity = "0.5";
@@ -448,8 +448,8 @@ function resetGame() {
     obstacles.forEach(obs => obs.el.remove());
     obstacles = [];
     
-    speedX = 2;
-    speedY = 2;
+    speedX = 3;
+    speedY = 3;
     btnX = window.innerWidth / 2 - 60;
     btnY = 300;
     
