@@ -41,7 +41,7 @@ let invincible = false;
 const obstacleEmojis = ["💀", "💣", "🔥", "⚡", "👻", "🦇", "🕷️", " Sharks"];
 
 function createObstacle() {
-    const count = Math.min(Math.floor(difficulty), 8);
+    const count = Math.min(3 + Math.floor(difficulty * 2), 20);
     while (obstacles.length < count) {
         const el = document.createElement("div");
         el.className = "obstacle";
@@ -52,8 +52,8 @@ function createObstacle() {
             el: el,
             x: Math.random() * (window.innerWidth - 60),
             y: Math.random() * (window.innerHeight - 200) + 100,
-            vx: (Math.random() - 0.5) * 4 * difficulty,
-            vy: (Math.random() - 0.5) * 4 * difficulty,
+            vx: (Math.random() - 0.5) * 8 * difficulty,
+            vy: (Math.random() - 0.5) * 8 * difficulty,
             size: 50
         };
         obstacles.push(obs);
