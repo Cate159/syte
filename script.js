@@ -105,12 +105,13 @@ function createFloatText(x, y, text) {
 mainBtn.addEventListener("click", (e) => {
     points += pointsPerClick;
     updateDisplay();
+    updateDifficulty();
     
-    const rect = mainBtn.getBoundingClientRect();
-    const areaRect = clickArea.getBoundingClientRect();
-    const x = rect.left - areaRect.left + rect.width / 2 + (Math.random() - 0.5) * 100;
-    const y = rect.top - areaRect.top;
-    createFloatText(x, y, "+" + formatNumber(pointsPerClick));
+    createFloatText(e.clientX, e.clientY - 50, "+" + formatNumber(pointsPerClick));
+    
+    const angle = Math.random() * Math.PI * 2;
+    btnX = Math.random() * (window.innerWidth - 150) + 30;
+    btnY = Math.random() * (window.innerHeight - 200) + 100;
     
     checkMilestones();
 });
