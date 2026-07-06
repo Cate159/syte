@@ -58,24 +58,42 @@ function playCoinSound() {
     oscillator.stop(audioCtx.currentTime + 0.2);
 }
 
-function playExplosionSound() {
+function playExplosionSound(emoji) {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     
     const oscillator = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
+    const filter = audioCtx.createBiquadFilter();
     
-    oscillator.type = "sawtooth";
-    oscillator.connect(gainNode);
+    oscillator.connect(filter);
+    filter.connect(gainNode);
     gainNode.connect(audioCtx.destination);
     
-    oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.3);
+    const sounds = {
+        "💀": { type: "sawtooth", freq: 80, duration: 0.4 },
+        "💣": { type: "square", freq: 100, duration: 0.5 },
+        "🔥": { type: "sawtooth", freq: 200, duration: 0.3 },
+        "⚡": { type: "square", freq: 400, duration: 0.15 },
+        "👻": { type: "sine", freq: 300, duration: 0.5 },
+        "🦇": { type: "triangle", freq: 250, duration: 0.3 },
+        "🕷️": { type: "sawtooth", freq: 150, duration: 0.35 },
+        "🦈": { type: "square", freq: 120, duration: 0.45 }
+    };
     
-    gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+    const sound = sounds[emoji] || { type: "sawtooth", freq: 150, duration: 0.3 };
+    
+    oscillator.type = sound.type;
+    oscillator.frequency.setValueAtTime(sound.freq, audioCtx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + sound.duration);
+    
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+    
+    gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + sound.duration);
     
     oscillator.start(audioCtx.currentTime);
-    oscillator.stop(audioCtx.currentTime + 0.3);
+    oscillator.stop(audioCtx.currentTime + sound.duration);
 }
 
 const obstacleEmojis = ["💀", "💣", "🔥", "⚡", "👻", "🦇", "🕷️", "🦈"];
