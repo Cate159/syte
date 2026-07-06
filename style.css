@@ -109,10 +109,26 @@ h2 {
 }
 
 .main-btn .click-text {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
     color: #1a1a2e;
-    margin-top: 5px;
+    margin-top: 2px;
+}
+
+.difficulty-indicator {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.7);
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    z-index: 1000;
+}
+
+.difficulty-indicator span {
+    color: #ff6b6b;
+    font-weight: bold;
 }
 
 .float-text {
