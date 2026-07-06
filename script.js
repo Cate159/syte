@@ -35,6 +35,82 @@ let btnY = 300;
 let speedX = 2;
 let speedY = 2;
 let difficulty = 1;
+let obstacles = [];
+let invincible = false;
+
+const obstacleEmojis = ["💀", "💣", "🔥", "⚡", "👻", "🦇", "🕷️", " Sharks"];
+
+function createObstacle() {
+    const count = Math.min(Math.floor(difficulty), 8);
+    while (obstacles.length < count) {
+        const el = document.createElement("div");
+        el.className = "obstacle";
+        el.textContent = obstacleEmojis[Math.floor(Math.random() * obstacleEmojis.length)];
+        document.body.appendChild(el);
+        
+        const obs = {
+            el: el,
+            x: Math.random() * (window.innerWidth - 60),
+            y: Math.random() * (window.innerHeight - 200) + 100,
+            vx: (Math.random() - 0.5) * 4 * difficulty,
+            vy: (Math.random() - 0.5) * 4 * difficulty,
+            size: 50
+        };
+        obstacles.push(obs);
+    }
+    while (obstacles.length > count) {
+        const obs = obstacles.pop();
+        obs.el.remove();
+    }
+}
+
+function moveObstacles() {
+    obstacles.forEach(obs => {
+        obs.x += obs.vx;
+        obs.y += obs.vy;
+        
+        if (obs.x < 0 || obs.x > window.innerWidth - obs.size) obs.vx *= -1;
+        if (obs.y < 80 || obs.y > window.innerHeight - obs.size) obs.vy *= -1;
+        
+        obs.x = Math.max(0, Math.min(obs.x, window.innerWidth - obs.size));
+        obs.y = Math.max(80, Math.min(obs.y, window.innerHeight - obs.size));
+        
+        obs.el.style.left = obs.x + "px";
+        obs.el.style.top = obs.y + "px";
+    });
+}
+
+function checkCollision() {
+    if (invincible) return;
+    
+    obstacles.forEach(obs => {
+        const dx = (btnX + 60) - (obs.x + obs.size / 2);
+        const dy = (btnY + 60) - (obs.y + obs.size / 2);
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < 70) {
+            const penalty = Math.floor(10 * difficulty);
+            points = Math.max(0, points - penalty);
+            updateDisplay();
+            showAchievement(`💀 -${penalty} punti!`);
+            
+            invincible = true;
+            mainBtn.style.opacity = "0.5";
+            setTimeout(() => {
+                invincible = false;
+                mainBtn.style.opacity = "1";
+            }, 1000);
+            
+            btnX = Math.random() * (window.innerWidth - 150) + 30;
+            btnY = Math.random() * (window.innerHeight - 200) + 100;
+        }
+    });
+}
+
+setInterval(() => {
+    moveObstacles();
+    checkCollision();
+}, 16);
 
 mainBtn.style.left = btnX + "px";
 mainBtn.style.top = btnY + "px";
