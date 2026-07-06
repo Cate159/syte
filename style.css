@@ -131,6 +131,21 @@ h2 {
     font-weight: bold;
 }
 
+.obstacle {
+    position: fixed;
+    font-size: 2.5rem;
+    z-index: 999;
+    cursor: not-allowed;
+    filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+    animation: pulse 0.5s ease-in-out infinite alternate;
+    user-select: none;
+}
+
+@keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+}
+
 .float-text {
     position: fixed;
     font-size: 1.5rem;
