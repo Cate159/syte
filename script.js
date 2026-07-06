@@ -58,6 +58,26 @@ function playCoinSound() {
     oscillator.stop(audioCtx.currentTime + 0.2);
 }
 
+function playExplosionSound() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    oscillator.type = "sawtooth";
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.3);
+    
+    gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+    
+    oscillator.start(audioCtx.currentTime);
+    oscillator.stop(audioCtx.currentTime + 0.3);
+}
+
 const obstacleEmojis = ["💀", "💣", "🔥", "⚡", "👻", "🦇", "🕷️", "🦈"];
 
 function createObstacle() {
