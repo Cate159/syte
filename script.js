@@ -275,9 +275,6 @@ function checkMilestones() {
         if (!completedMilestones.has(i) && points >= m.target) {
             completedMilestones.add(i);
             points += m.bonus;
-            for (let j = 0; j < 3; j++) {
-                setTimeout(() => playCoinSound(), j * 100);
-            }
             showAchievement(`${m.icon} Obiettivo raggiunto! ${m.reward}`);
             renderMilestones();
         }
