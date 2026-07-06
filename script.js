@@ -546,8 +546,9 @@ function resetGame() {
     obstacles.forEach(obs => obs.el.remove());
     obstacles = [];
     
-    speedX = 3;
-    speedY = 3;
+    starSpeedX = 3;
+    starSpeedY = 3;
+    obstacleSpeed = 8;
     btnX = window.innerWidth / 2 - 60;
     btnY = 300;
     
