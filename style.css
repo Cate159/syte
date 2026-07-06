@@ -132,13 +132,14 @@ h2 {
 }
 
 .float-text {
-    position: absolute;
+    position: fixed;
     font-size: 1.5rem;
     font-weight: bold;
     color: #ffd700;
     pointer-events: none;
     animation: floatUp 1s ease-out forwards;
     text-shadow: 0 0 10px rgba(255, 200, 0, 0.8);
+    z-index: 2000;
 }
 
 @keyframes floatUp {
