@@ -31,6 +31,54 @@ const upgradeGrid = document.getElementById("upgradeGrid");
 const milestonesDiv = document.getElementById("milestones");
 const achievementsDiv = document.getElementById("achievements");
 
+let btnX = window.innerWidth / 2 - 60;
+let btnY = 300;
+let speedX = 2;
+let speedY = 2;
+let difficulty = 1;
+
+mainBtn.style.left = btnX + "px";
+mainBtn.style.top = btnY + "px";
+
+function updateDifficulty() {
+    difficulty = 1 + Math.floor(points / 100) * 0.5;
+    const baseSpeed = 2;
+    speedX = baseSpeed * difficulty * (Math.random() > 0.5 ? 1 : -1);
+    speedY = baseSpeed * difficulty * (Math.random() > 0.5 ? 1 : -1);
+}
+
+function moveButton() {
+    btnX += speedX;
+    btnY += speedY;
+    
+    if (btnX <= 0 || btnX >= window.innerWidth - 120) {
+        speedX *= -1;
+        speedX += (Math.random() - 0.5) * difficulty;
+    }
+    if (btnY <= 80 || btnY >= window.innerHeight - 120) {
+        speedY *= -1;
+        speedY += (Math.random() - 0.5) * difficulty;
+    }
+    
+    btnX = Math.max(0, Math.min(btnX, window.innerWidth - 120));
+    btnY = Math.max(80, Math.min(btnY, window.innerHeight - 120));
+    
+    mainBtn.style.left = btnX + "px";
+    mainBtn.style.top = btnY + "px";
+    
+    requestAnimationFrame(moveButton);
+}
+
+mainBtn.addEventListener("mouseenter", () => {
+    if (difficulty > 2) {
+        const angle = Math.random() * Math.PI * 2;
+        speedX = Math.cos(angle) * difficulty * 3;
+        speedY = Math.sin(angle) * difficulty * 3;
+    }
+});
+
+moveButton();
+
 function formatNumber(n) {
     if (n >= 1000000) return (n / 1000000).toFixed(1) + "M";
     if (n >= 1000) return (n / 1000).toFixed(1) + "K";
