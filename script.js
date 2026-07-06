@@ -285,8 +285,8 @@ function moveButton() {
 mainBtn.addEventListener("mouseenter", () => {
     if (difficulty > 2) {
         const angle = Math.random() * Math.PI * 2;
-        speedX = Math.cos(angle) * difficulty * 3;
-        speedY = Math.sin(angle) * difficulty * 3;
+        starSpeedX = Math.cos(angle) * 5;
+        starSpeedY = Math.sin(angle) * 5;
     }
 });
 
