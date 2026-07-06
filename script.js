@@ -81,30 +81,6 @@ function moveObstacles() {
 }
 
 function checkCollision() {
-    if (invincible) return;
-    
-    obstacles.forEach(obs => {
-        const dx = (btnX + 60) - (obs.x + obs.size / 2);
-        const dy = (btnY + 60) - (obs.y + obs.size / 2);
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        
-        if (dist < 70) {
-            const penalty = Math.floor(10 * difficulty);
-            points = Math.max(0, points - penalty);
-            updateDisplay();
-            showAchievement(`💀 -${penalty} punti!`);
-            
-            invincible = true;
-            mainBtn.style.opacity = "0.5";
-            setTimeout(() => {
-                invincible = false;
-                mainBtn.style.opacity = "1";
-            }, 1000);
-            
-            btnX = Math.random() * (window.innerWidth - 150) + 30;
-            btnY = Math.random() * (window.innerHeight - 200) + 100;
-        }
-    });
 }
 
 setInterval(() => {
