@@ -56,6 +56,22 @@ function createObstacle() {
             vy: (Math.random() - 0.5) * 8 * difficulty,
             size: 50
         };
+        
+        el.addEventListener("click", () => {
+            if (invincible) return;
+            const penalty = Math.floor(10 * difficulty);
+            points = Math.max(0, points - penalty);
+            updateDisplay();
+            showAchievement(`💀 -${penalty} punti!`);
+            
+            invincible = true;
+            mainBtn.style.opacity = "0.5";
+            setTimeout(() => {
+                invincible = false;
+                mainBtn.style.opacity = "1";
+            }, 500);
+        });
+        
         obstacles.push(obs);
     }
     while (obstacles.length > count) {
