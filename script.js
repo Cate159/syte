@@ -32,8 +32,8 @@ const achievementsDiv = document.getElementById("achievements");
 
 let btnX = window.innerWidth / 2 - 60;
 let btnY = 300;
-let speedX = 2;
-let speedY = 2;
+let speedX = 4;
+let speedY = 4;
 let difficulty = 1;
 let obstacles = [];
 let invincible = false;
@@ -116,8 +116,8 @@ mainBtn.style.left = btnX + "px";
 mainBtn.style.top = btnY + "px";
 
 function updateDifficulty() {
-    difficulty = 1 + Math.floor(points / 100) * 0.5;
-    const baseSpeed = 2;
+    difficulty = 1 + Math.floor(points / 50) * 0.5;
+    const baseSpeed = 4;
     speedX = baseSpeed * difficulty * (Math.random() > 0.5 ? 1 : -1);
     speedY = baseSpeed * difficulty * (Math.random() > 0.5 ? 1 : -1);
     createObstacle();
