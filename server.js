@@ -52,6 +52,46 @@ const server = http.createServer((req, res) => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ success: true }));
     }
+    else if (url === '/api/leaderboard' && method === 'GET') {
+        res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+        res.end(JSON.stringify(getLeaderboard()));
+    }
+    else if (url === '/api/leaderboard' && method === 'POST') {
+        let body = '';
+        req.on('data', chunk => body += chunk);
+        req.on('end', () => {
+            try {
+                const { name, score } = JSON.parse(body);
+                if (!name || !score) {
+                    res.writeHead(400);
+                    res.end(JSON.stringify({ error: 'Name and score required' }));
+                    return;
+                }
+                
+                let leaderboard = getLeaderboard();
+                const existing = leaderboard.findIndex(e => e.name === name);
+                
+                if (existing >= 0) {
+                    if (score > leaderboard[existing].score) {
+                        leaderboard[existing].score = score;
+                        leaderboard[existing].date = new Date().toISOString();
+                    }
+                } else {
+                    leaderboard.push({ name, score, date: new Date().toISOString() });
+                }
+                
+                leaderboard.sort((a, b) => b.score - a.score);
+                leaderboard = leaderboard.slice(0, 100);
+                saveLeaderboard(leaderboard);
+                
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: true, rank: leaderboard.findIndex(e => e.name === name) + 1 }));
+            } catch (e) {
+                res.writeHead(400);
+                res.end(JSON.stringify({ error: 'Invalid data' }));
+            }
+        });
+    }
     else {
         const filePath = url === '/' ? '/index.html' : url;
         const ext = path.extname(filePath);
