@@ -452,6 +452,18 @@ renderUpgrades();
 renderMilestones();
 createObstacle();
 loadLeaderboard();
+trackVisit();
+
+async function trackVisit() {
+    try {
+        await fetch('/api/visits', { method: 'POST' });
+        const res = await fetch('/api/visits');
+        const data = await res.json();
+        document.getElementById('visitCount').textContent = data.visits;
+    } catch (e) {
+        console.log('Visit counter non disponibile');
+    }
+}
 
 async function loadLeaderboard() {
     try {
