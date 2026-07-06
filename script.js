@@ -92,8 +92,8 @@ function createObstacle() {
             el: el,
             x: Math.random() * (window.innerWidth - 60),
             y: Math.random() * (window.innerHeight - 200) + 100,
-            vx: (Math.random() - 0.5) * 4 * difficulty,
-            vy: (Math.random() - 0.5) * 4 * difficulty,
+            vx: (Math.random() - 0.5) * 5 * difficulty,
+            vy: (Math.random() - 0.5) * 5 * difficulty,
             size: 50
         };
         
@@ -150,7 +150,7 @@ mainBtn.style.top = btnY + "px";
 
 function updateDifficulty() {
     difficulty = 1 + Math.floor(points / 50) * 0.3;
-    const baseSpeed = 2;
+    const baseSpeed = 3;
     speedX = baseSpeed * difficulty * (Math.random() > 0.5 ? 1 : -1);
     speedY = baseSpeed * difficulty * (Math.random() > 0.5 ? 1 : -1);
     createObstacle();
