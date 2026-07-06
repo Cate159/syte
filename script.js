@@ -32,8 +32,8 @@ const achievementsDiv = document.getElementById("achievements");
 
 let btnX = window.innerWidth / 2 - 60;
 let btnY = 300;
-let speedX = 2;
-let speedY = 2;
+let speedX = 3;
+let speedY = 3;
 let difficulty = 1;
 let obstacles = [];
 let invincible = false;
