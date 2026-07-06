@@ -308,3 +308,4 @@ loadGame();
 updateDisplay();
 renderUpgrades();
 renderMilestones();
+createObstacle();
