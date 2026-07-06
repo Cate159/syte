@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Docs - Caterina3 Game</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .api-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .endpoint {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ffd700;
+        }
+        .endpoint h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        .method {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .get { background: #51cf66; }
+        .post { background: #339af9; }
+        .url {
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: block;
+        }
+        .response-box {
+            background: rgba(0,0,0,0.4);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            color: #7fff7f;
+        }
+        .try-btn {
+            background: linear-gradient(145deg, #ffd700, #ff8c00);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            color: #1a1a2e;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .try-btn:hover {
+            transform: scale(1.05);
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="api-container">
+        <a href="/" class="back-link">← Torna al gioco</a>
+        <h1>📚 API Pubbliche</h1>
+        <p style="margin-bottom: 30px; color: #aaa;">Chiunque può usare queste API per creare app, bot o integrazioni!</p>
+
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> Statistiche Globali</h3>
+            <code class="url">/api/public/stats</code>
+            <p>Restituisce statistiche globali del gioco</p>
+            <button class="try-btn" onclick="testApi('/api/public/stats')">Prova</button>
+            <div id="stats-response" class="response-box" style="display:none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> Top Giocatori</h3>
+            <code class="url">/api/public/top/:limit</code>
+            <p>Ottieni i migliori N giocatori (max 100)</p>
+            <input type="number" id="top-limit" value="5" min="1" max="100" style="width: 60px; padding: 5px; border-radius: 5px; border: none;">
+            <button class="try-btn" onclick="testApi('/api/public/top/' + document.getElementById('top-limit').value)">Prova</button>
+            <div id="top-response" class="response-box" style="display:none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> Info Giocatore</h3>
+            <code class="url">/api/public/player/:name</code>
+            <p>Ottieni informazioni su un giocatore specifico</p>
+            <input type="text" id="player-name" placeholder="Nome giocatore" style="padding: 5px; border-radius: 5px; border: none; width: 150px;">
+            <button class="try-btn" onclick="testApi('/api/public/player/' + document.getElementById('player-name').value)">Prova</button>
+            <div id="player-response" class="response-box" style="display:none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> Consiglio Casuale</h3>
+            <code class="url">/api/public/random-tip</code>
+            <p>Un consiglio casuale per il gioco</p>
+            <button class="try-btn" onclick="testApi('/api/public/random-tip')">Prova</button>
+            <div id="tip-response" class="response-box" style="display:none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> Contatore Visite</h3>
+            <code class="url">/api/visits</code>
+            <p>Numero totale di visite al sito</p>
+            <button class="try-btn" onclick="testApi('/api/visits')">Prova</button>
+            <div id="visits-response" class="response-box" style="display:none;"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method get">GET</span> Classifica Completa</h3>
+            <code class="url">/api/leaderboard</code>
+            <p>Classifica completa dei migliori 100 giocatori</p>
+            <button class="try-btn" onclick="testApi('/api/leaderboard')">Prova</button>
+            <div id="leaderboard-response" class="response-box" style="display:none;"></div>
+        </div>
+
+        <h2 style="margin-top: 40px; color: #ffd700;">💻 Esempio di utilizzo</h2>
+        <div class="response-box">// JavaScript
+fetch('https://tuo-sito.onrender.com/api/public/stats')
+  .then(r => r.json())
+  .then(data => console.log(data));
+
+// Output: { total_visits: 150, total_players: 23, total_score: 50000 }</div>
+    </div>
+
+    <script>
+        async function testApi(url) {
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                let responseId = url.split('/')[2]?.replace('/', '-') || 'response';
+                if (url.includes('stats')) responseId = 'stats-response';
+                else if (url.includes('top')) responseId = 'top-response';
+                else if (url.includes('player')) responseId = 'player-response';
+                else if (url.includes('tip')) responseId = 'tip-response';
+                else if (url.includes('visits')) responseId = 'visits-response';
+                else if (url.includes('leaderboard')) responseId = 'leaderboard-response';
+                
+                const el = document.getElementById(responseId);
+                el.style.display = 'block';
+                el.textContent = JSON.stringify(data, null, 2);
+            } catch (e) {
+                alert('Errore: ' + e.message);
+            }
+        }
+    </script>
+</body>
+</html>
