@@ -3,6 +3,20 @@ const fs = require('fs');
 const path = require('path');
 
 const data = { counter: 0, todos: [] };
+const leaderboardFile = path.join(__dirname, 'leaderboard.json');
+
+function getLeaderboard() {
+    try {
+        if (fs.existsSync(leaderboardFile)) {
+            return JSON.parse(fs.readFileSync(leaderboardFile, 'utf8'));
+        }
+    } catch (e) {}
+    return [];
+}
+
+function saveLeaderboard(leaderboard) {
+    fs.writeFileSync(leaderboardFile, JSON.stringify(leaderboard, null, 2));
+}
 
 const server = http.createServer((req, res) => {
     const url = req.url;
